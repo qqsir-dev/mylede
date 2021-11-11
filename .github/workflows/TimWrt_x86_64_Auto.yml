@@ -50,10 +50,12 @@ jobs:
         git config --global user.email "git@github.com"
         git config --global user.name "GitHub"
         git clone $REPO_URL -b $REPO_BRANCH openwrt
+        working-directory: /openwrt
+        ln -sf /openwrt $GITHUB_WORKSPACE/openwrt
         
     - name: 加载自定义插件主题
       run: |
-       cd openwrt/package
+       cd package
        rm -rf lean/luci-theme-argon
        rm -rf lean/luci-app-argon-config
        # rm -rf lean/luci-app-adbyby-plus
@@ -110,14 +112,13 @@ jobs:
        # git clone https://github.com/BoringCat/luci-app-mentohust.git
        
     - name: 下载插件
-      run:  openwrt/scripts/feeds update -a
+      run:  ./scripts/feeds update -a
 
     - name: 读取插件
-      run: openwrt/scripts/feeds install -a
+      run: ./scripts/feeds install -a
 
     - name: 固件定制
       run: |
-        cd openwrt
           rm -f ./.config*
           touch ./.config
           cat >> .config <<EOF
@@ -459,7 +460,6 @@ jobs:
 
     - name: 修改自定义配置
       run: |
-        cd openwrt
         # 修改内核为5.4
         # sed -i 's/KERNEL_PATCHVER:=5.10/KERNEL_PATCHVER:=5.4/g' target/linux/x86/Makefile
         # sed -i 's/KERNEL_TESTING_PATCHVER:=5.10/KERNEL_TESTING_PATCHVER:=5.4/g' target/linux/x86/Makefile
@@ -525,8 +525,7 @@ jobs:
         
     - name: 下载安装包
       id: package
-      run: |
-        working-directory: /openwrt
+      run: | 
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
@@ -535,7 +534,6 @@ jobs:
     - name: 开始编译固件
       id: compile
       run: |
-        working-directory: /openwrt
         echo -e "$(nproc) thread compile"
         curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=开始编译OpenWrt-5.4内核固件&desp=${{ env.DEVICE_NAME }}
         make -j$(nproc) || make -j1 || make -j1 V=s
