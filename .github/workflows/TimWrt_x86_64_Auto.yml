@@ -60,8 +60,8 @@ jobs:
        rm -rf lean/luci-app-qbittorrent
        rm -rf lean/luci-app-xlnetacc
        rm -rf lean/luci-app-jd-dailybonus
-       mkdir openwrt/openwrt-packages
-       cd openwrt/openwrt-packages
+       mkdir openwrt-packages
+       cd openwrt-packages
        # git clone https://github.com/longcat99/long.git 包含了一些主题
        # git clone -b hello https://github.com/DHDAXCW/openwrt-passwall
        # git clone https://github.com/xiaorouji/openwrt-passwall
