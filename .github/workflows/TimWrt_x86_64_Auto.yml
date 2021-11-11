@@ -47,7 +47,7 @@ jobs:
         sudo chown $USER:$GROUPS /openwrt
         
     - name: 下载固件源码
-      working-directory: /workdir
+      working-directory: /openwrt
       run: |
         df -hT $PWD
         ln -sf /openwrt $GITHUB_WORKSPACE/openwrt
