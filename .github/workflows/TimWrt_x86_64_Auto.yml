@@ -53,7 +53,7 @@ jobs:
         ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
         git config --global user.email "git@github.com"
         git config --global user.name "GitHub"
-        git clone $REPO_URL -b $REPO_BRANCH /workdir/openwrt
+        git clone $REPO_URL -b $REPO_BRANCH openwrt
     - name: 加载自定义插件主题
       run: |
        cd package
