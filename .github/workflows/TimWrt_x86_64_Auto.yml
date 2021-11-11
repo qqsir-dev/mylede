@@ -28,8 +28,6 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    outputs:
-      OPENWRTROOT: ${{ steps.update.outputs.OPENWRTROOT }}
 
     steps:
     - name: 检查项目分支
@@ -54,8 +52,7 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
     - name: 加载自定义插件主题
       run: |
-       echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
-       cd $OPENWRTROOT/package
+       cd openwrt/package
        rm -rf lean/luci-theme-argon
        rm -rf lean/luci-app-argon-config
        # rm -rf lean/luci-app-adbyby-plus
@@ -63,8 +60,8 @@ jobs:
        rm -rf lean/luci-app-qbittorrent
        rm -rf lean/luci-app-xlnetacc
        rm -rf lean/luci-app-jd-dailybonus
-       mkdir $OPENWRTROOT/openwrt-packages
-       cd $OPENWRTROOT/openwrt-packages
+       mkdir openwrt/openwrt-packages
+       cd openwrt/openwrt-packages
        # git clone https://github.com/longcat99/long.git 包含了一些主题
        # git clone -b hello https://github.com/DHDAXCW/openwrt-passwall
        # git clone https://github.com/xiaorouji/openwrt-passwall
