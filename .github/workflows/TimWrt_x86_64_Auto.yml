@@ -46,11 +46,6 @@ jobs:
         sudo mkdir -p /workdir
         sudo chown $USER:$GROUPS /workdir
         
-    - name: Clone Source Code
-      run: |
-        df -hT $PWD
-        
-    
     - name: 下载固件源码
       working-directory: /workdir
       run: |
