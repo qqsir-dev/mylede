@@ -51,8 +51,9 @@ jobs:
         git config --global user.name "GitHub"
         git clone $REPO_URL -b $REPO_BRANCH openwrt
     - name: 加载自定义插件主题
+      working-directory: /openwrt
       run: |
-       cd openwrt/package
+       cd package
        rm -rf lean/luci-theme-argon
        rm -rf lean/luci-app-argon-config
        # rm -rf lean/luci-app-adbyby-plus
