@@ -28,6 +28,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      OPENWRTROOT: ${{ steps.update.outputs.OPENWRTROOT }}
 
     steps:
     - name: 检查项目分支
@@ -43,8 +45,6 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo timedatectl set-timezone "$TZ"
-        sudo mkdir -p /openwrt
-        sudo chown $USER:$GROUPS /openwrt
         
     - name: 下载固件源码
       run: |
@@ -53,9 +53,9 @@ jobs:
         git config --global user.name "GitHub"
         git clone $REPO_URL -b $REPO_BRANCH openwrt
     - name: 加载自定义插件主题
-      working-directory: /openwrt
       run: |
-       cd package
+       echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
+       cd $OPENWRTROOT/package
        rm -rf lean/luci-theme-argon
        rm -rf lean/luci-app-argon-config
        # rm -rf lean/luci-app-adbyby-plus
@@ -63,8 +63,8 @@ jobs:
        rm -rf lean/luci-app-qbittorrent
        rm -rf lean/luci-app-xlnetacc
        rm -rf lean/luci-app-jd-dailybonus
-       mkdir openwrt-packages
-       cd openwrt-packages
+       mkdir $OPENWRTROOT/openwrt-packages
+       cd $OPENWRTROOT/openwrt-packages
        # git clone https://github.com/longcat99/long.git 包含了一些主题
        # git clone -b hello https://github.com/DHDAXCW/openwrt-passwall
        # git clone https://github.com/xiaorouji/openwrt-passwall
