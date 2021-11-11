@@ -52,9 +52,8 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
         
     - name: 加载自定义插件主题
-      working-directory: /openwrt
       run: |
-       cd package
+       cd openwrt/package
        rm -rf lean/luci-theme-argon
        rm -rf lean/luci-app-argon-config
        # rm -rf lean/luci-app-adbyby-plus
@@ -114,7 +113,7 @@ jobs:
       run:  openwrt/scripts/feeds update -a
 
     - name: 读取插件
-      run: ./scripts/feeds install -a
+      run: openwrt/scripts/feeds install -a
 
     - name: 固件定制
       run: |
