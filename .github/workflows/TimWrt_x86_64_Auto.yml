@@ -56,6 +56,7 @@ jobs:
         git clone $REPO_URL -b $REPO_BRANCH openwrt
     - name: 加载自定义插件主题
       run: |
+       echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
        cd package
        rm -rf lean/luci-theme-argon
        rm -rf lean/luci-app-argon-config
