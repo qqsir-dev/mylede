@@ -117,8 +117,8 @@ jobs:
 
     - name: 固件定制
       run: |
-          rm -f ./.config*
-          touch ./.config
+          rm -f openwrt/.config*
+          touch openwrt/.config
           cat >> .config <<EOF
           CONFIG_TARGET_x86=y
           CONFIG_TARGET_x86_64=y
@@ -453,7 +453,7 @@ jobs:
           CONFIG_PACKAGE_zsh=y
           CONFIG_PACKAGE_cfdisk=y
           EOF
-          sed -i 's/^[ \t]*//g' ./.config
+          sed -i 's/^[ \t]*//g' openwrt/.config
           make defconfig
 
     - name: 修改自定义配置
@@ -462,10 +462,10 @@ jobs:
         # sed -i 's/KERNEL_PATCHVER:=5.10/KERNEL_PATCHVER:=5.4/g' target/linux/x86/Makefile
         # sed -i 's/KERNEL_TESTING_PATCHVER:=5.10/KERNEL_TESTING_PATCHVER:=5.4/g' target/linux/x86/Makefile
         # 修改默认IP地址
-        sed -i 's/192.168.1.1/192.168.50.2/g' package/base-files/files/bin/config_generate
-        sed -i '/uci commit system/i\uci set system.@system[0].hostname='TimWrt'' package/lean/default-settings/files/zzz-default-settings
-        sed -i "s/OpenWrt /YG build @TimWrt $(TZ=UTC-8 date "+%Y%m%d") /g" package/lean/default-settings/files/zzz-default-settings
-        sed -i 's/"网络存储"/"存储"/g' package/lean/luci-app-vsftpd/po/zh-cn/vsftpd.po
+        sed -i 's/192.168.1.1/192.168.50.2/g' openwrt/package/base-files/files/bin/config_generate
+        sed -i '/uci commit system/i\uci set system.@system[0].hostname='TimWrt'' openwrt/package/lean/default-settings/files/zzz-default-settings
+        sed -i "s/OpenWrt /YG build @TimWrt $(TZ=UTC-8 date "+%Y%m%d") /g" openwrt/package/lean/default-settings/files/zzz-default-settings
+        sed -i 's/"网络存储"/"存储"/g' openwrt/package/lean/luci-app-vsftpd/po/zh-cn/vsftpd.po
         # sed -i 's/"网络存储"/"存储"/g' package/lean/luci-app-usb-printer/po/zh-cn/usb-printer.po
         # sed -i 's/"BaiduPCS Web"/"百度网盘"/g' package/lean/luci-app-baidupcs-web/luasrc/controller/baidupcs-web.lua
         sed -i 's/"带宽监控"/"带宽"/g' feeds/luci/applications/luci-app-nlbwmon/po/zh-cn/nlbwmon.po
@@ -475,7 +475,7 @@ jobs:
         # 修改openclash排序
         # find package/*/ feeds/*/ -maxdepth 6 -path "*OpenClash/luci-app-openclash/luasrc/controller/openclash.lua" | xargs -i sed -i 's/\"OpenClash\")\, 50/\"OpenClash\")\, 1/g' {}
         # 修改ShadowSocksR Plus+排序
-        find package/*/ feeds/*/ -maxdepth 6 -path "*helloworld/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua" | xargs -i sed -i 's/\"ShadowSocksR Plus+\")\, 10/\"ShadowSocksR Plus+\")\, 0/g' {}
+        find openwrt/package/*/ feeds/*/ -maxdepth 6 -path "*helloworld/luci-app-ssr-plus/luasrc/controller/shadowsocksr.lua" | xargs -i sed -i 's/\"ShadowSocksR Plus+\")\, 10/\"ShadowSocksR Plus+\")\, 0/g' {}
         # 修改GodProxy滤广告排序 重命名为:去TMD广告
         # find package/*/ feeds/*/ -maxdepth 6 -path "*luci-app-godproxy/luasrc/controller/koolproxy.lua" | xargs -i sed -i 's/\"KoolproxyR Plus+\")\,1/\"KoolproxyR Plus+\")\,10/g' {}
         # 修改luci-app-smartdns排序 
@@ -500,30 +500,31 @@ jobs:
         # find package/*/ feeds/*/ -maxdepth 5 -path "*luci-app-bypass/Makefile" | xargs -i sed -i 's/smartdns-le/smartdns/g' {}
         
         # 修改frp排序95
-        find package/*/ feeds/*/ -maxdepth 5 -path "*luci-app-frpc/luasrc/controller/frp.lua" | xargs -i sed -i 's/\"Frp Setting\")\, 100/\"Frp Setting\")\, 95/g' {}
+        find openwrt/package/*/ feeds/*/ -maxdepth 5 -path "*luci-app-frpc/luasrc/controller/frp.lua" | xargs -i sed -i 's/\"Frp Setting\")\, 100/\"Frp Setting\")\, 95/g' {}
         
         # 修改frps排序95
-        find package/*/ feeds/*/ -maxdepth 5 -path "*lean/luci-app-frps/luasrc/controller/frps.lua" | xargs -i sed -i 's/\"Frps\"))/\"Frps\")\, 95)/g' {}
+        find openwrt/package/*/ feeds/*/ -maxdepth 5 -path "*lean/luci-app-frps/luasrc/controller/frps.lua" | xargs -i sed -i 's/\"Frps\"))/\"Frps\")\, 95)/g' {}
         
         # 修改nps排序94
-        find package/*/ feeds/*/ -maxdepth 5 -path "*luci-app-nps/luasrc/controller/nps.lua" | xargs -i sed -i 's/\"Nps Setting\")\, 100/\"Nps Setting\")\, 94/g' {}
+        find openwrt/package/*/ feeds/*/ -maxdepth 5 -path "*luci-app-nps/luasrc/controller/nps.lua" | xargs -i sed -i 's/\"Nps Setting\")\, 100/\"Nps Setting\")\, 94/g' {}
         
         # 修改pppoe-server排序5
-        find package/*/ feeds/*/ -maxdepth 5 -path "*luci-app-pppoe-server/luasrc/controller/pppoe-server.lua" | xargs -i sed -i 's/\"PPPoE Server\")\, 3/\"PPPoE Server\")\, 5/g' {}
+        find openwrt/package/*/ feeds/*/ -maxdepth 5 -path "*luci-app-pppoe-server/luasrc/controller/pppoe-server.lua" | xargs -i sed -i 's/\"PPPoE Server\")\, 3/\"PPPoE Server\")\, 5/g' {}
         
         # 写自己的网络配置
-         sed -i "/exit/iuci set network.lan.gateway=\'192.168.50.1\'\nuci set network.lan.dns=\'119.29.29.29 223.5.5.5\'\nuci commit network\nuci set dhcp.lan.ignore=\'1\'\nuci commit dhcp\n" package/lean/default-settings/files/zzz-default-settings
+         sed -i "/exit/iuci set network.lan.gateway=\'192.168.50.1\'\nuci set network.lan.dns=\'119.29.29.29 223.5.5.5\'\nuci commit network\nuci set dhcp.lan.ignore=\'1\'\nuci commit dhcp\n" openwrt/package/lean/default-settings/files/zzz-default-settings
         
         # 更改nlbwmon netlink uffer size
-         sed -i '1s/$/&\nnet.core.wmem_max=16777216\nnet.core.rmem_max=16777216/' package/base-files/files/etc/sysctl.conf
-         sed -i "/exit/iuci set nlbwmon.@nlbwmon[0].netlink_buffer_size=\'10485760\'\nuci set nlbwmon.@nlbwmon[0].commit_interval=\'2h\'\nuci commit nlbwmon\n" package/lean/default-settings/files/zzz-default-settings
+         sed -i '1s/$/&\nnet.core.wmem_max=16777216\nnet.core.rmem_max=16777216/' openwrt/package/base-files/files/etc/sysctl.conf
+         sed -i "/exit/iuci set nlbwmon.@nlbwmon[0].netlink_buffer_size=\'10485760\'\nuci set nlbwmon.@nlbwmon[0].commit_interval=\'2h\'\nuci commit nlbwmon\n" openwrt/package/lean/default-settings/files/zzz-default-settings
         
         # 默认语言为英语
-         sed -i "/exit/ised -i \"s/'zh_cn'/'en'/g\" /etc/config/luci\n" package/base-files/files/etc/rc.local
+         sed -i "/exit/ised -i \"s/'zh_cn'/'en'/g\" /etc/config/luci\n" openwrt/package/base-files/files/etc/rc.local
         
     - name: 下载安装包
       id: package
       run: |
+        cd openwrt
         make defconfig
         make download -j8
         find dl -size -1024c -exec ls -l {} \;
@@ -532,6 +533,7 @@ jobs:
     - name: 开始编译固件
       id: compile
       run: |
+        cd openwrt
         echo -e "$(nproc) thread compile"
         curl https://sc.ftqq.com/${{ secrets.SCKEY }}.send?text=开始编译OpenWrt-5.4内核固件&desp=${{ env.DEVICE_NAME }}
         make -j$(nproc) || make -j1 || make -j1 V=s
@@ -549,13 +551,13 @@ jobs:
       if: steps.compile.outputs.status == 'success' && env.UPLOAD_BIN_DIR == 'true'
       with:
         name: OpenWrt_bin${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: bin/packages/x86_64
+        path: openwrt/bin/packages/x86_64
 
     - name: 整理编译好的固件
       id: organize
       if: env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       run: |
-        cd bin/targets/*/*
+        cd openwrt/bin/targets/*/*
         rm -rf packages && mkdir packages
         find -name "*esxi-flat.vmdk*" | xargs -i mv -f {} packages
         find -name "*kernel.bin*" | xargs -i mv -f {} packages
