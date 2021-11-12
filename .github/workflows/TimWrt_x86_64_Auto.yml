@@ -28,6 +28,13 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'qqsir-dev/mylede'
+    outputs:
+      OPENWRTROOT: ${{ steps.update.outputs.OPENWRTROOT }}
+      TARGET: ${{ steps.compile.outputs.TARGET }}
+      SUBTARGET: ${{ steps.compile.outputs.SUBTARGET }}
+      FIRMWARE: ${{ steps.compile.outputs.FIRMWARE }}
+      GENERATE_STATUS: ${{ steps.generate.outputs.GENERATE_STATUS }}
 
     steps:
     - name: 检查项目分支
@@ -54,7 +61,7 @@ jobs:
         
     - name: 加载自定义插件主题
       run: |
-       cd package
+       cd $OPENWRTROOT/package
        rm -rf lean/luci-theme-argon
        rm -rf lean/luci-app-argon-config
        # rm -rf lean/luci-app-adbyby-plus
@@ -111,13 +118,18 @@ jobs:
        # git clone https://github.com/BoringCat/luci-app-mentohust.git
        
     - name: 下载插件
-      run:  ./scripts/feeds update -a
+      run: | 
+       cd $OPENWRTROOT
+       ./scripts/feeds update -a
 
     - name: 读取插件
-      run: ./scripts/feeds install -a
+      run: |
+       cd $OPENWRTROOT
+       ./scripts/feeds install -a
 
     - name: 固件定制
       run: |
+          cd $OPENWRTROOT
           rm -f ./.config*
           touch ./.config
           cat >> .config <<EOF
